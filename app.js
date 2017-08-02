@@ -4,35 +4,25 @@ const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const app = express();
 
 global.rootDir = path.resolve(__dirname) + '/';
+global.middlewaresDir = path.join(rootDir, 'middlewares/');
 global.servicesDir = path.join(rootDir, 'services/');
+
+// Session
+const session = require(middlewaresDir + "/session");
 
 // Routes
 const index = require('./routes/index');
 const comments = require('./routes/comments');
-
-// Session
-const redis = require("redis");
-const session = require('express-session');
-const redisStore = require('connect-redis')(session);
-
-const app = express();
-require('dotenv').config();
 
 // view engine setup
 app.set('views', path.join(rootDir, 'views'));
 app.set('view engine', 'pug');
 
 // session setup
-const redisClient = redis.createClient({url: process.env.REDIS_URL});
-app.use(session({
-  secret: process.env.SECRET,
-  store: new redisStore({client: redisClient}),
-  saveUninitialized: false,
-  resave: false
-}));
-
+app.use(session);
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
