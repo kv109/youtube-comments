@@ -9,20 +9,20 @@ const VIDEO_ID = "wVhJ_d4JrbY";
 const routerWithSockets = (io) => {
   io.on('connection', (socket) => {
     socket.on('fetch-comment-threads', () => {
-      // youtube.commentThreads.list({
-      //   maxResults: 100,
-      //   order: "relevance",
-      //   part: "snippet,replies",
-      //   videoId: VIDEO_ID
-      // }, (err, data) => {
-      //   if (err) {
-      //     console.error(err);
-      //     res.render("error", {error: err, message: "Could not fetch Comments."});
-      //   } else {
-      //     const comments = parseComments(data);
-      //   }
-      // });
-      socket.emit('fetched-comment-threads');
+      youtube.commentThreads.list({
+        maxResults: 100,
+        order: "relevance",
+        part: "snippet,replies",
+        videoId: VIDEO_ID
+      }, (err, data) => {
+        if (err) {
+          console.error(err);
+          socket.emit("fetched-comment-threads", {error: err, message: "Could not fetch Comments."});
+        } else {
+          const comments = parseComments(data);
+          socket.emit("fetched-comment-threads", {page: 1, comments: comments});
+        }
+      });
     });
   });
 
