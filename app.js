@@ -5,6 +5,10 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const app = express();
+const server = require('http').createServer(app);
+
+// Websockets
+const io = require('socket.io')(server);
 
 global.rootDir = path.resolve(__dirname) + '/';
 global.middlewaresDir = path.join(rootDir, 'middlewares/');
@@ -15,7 +19,7 @@ const session = require(middlewaresDir + "/session");
 
 // Routes
 const index = require('./routes/index');
-const comments = require('./routes/comments');
+const comments = require('./routes/comments')(io);
 
 // view engine setup
 app.set('views', path.join(rootDir, 'views'));
@@ -54,4 +58,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
+module.exports = {
+  app: app,
+  server: server
+};

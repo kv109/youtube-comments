@@ -4,7 +4,9 @@
  * Module dependencies.
  */
 
-var app = require('../app');
+var expressApp = require('../app');
+var app = expressApp.app;
+var server = expressApp.server;
 var debug = require('debug')('youtube-comments:server');
 var http = require('http');
 
@@ -19,7 +21,7 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+// var server = http.createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.
