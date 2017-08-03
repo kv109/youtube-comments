@@ -3,4 +3,8 @@ extends ../layout
 block content
     ul
     each comment in comments
-        li= comment
+        li !{comment.textDisplay}
+            if comment.replies.length
+                ul
+                    each reply in comment.replies
+                        li !{reply.textDisplay} #{reply.publishedAt}
