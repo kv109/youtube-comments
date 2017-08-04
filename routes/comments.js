@@ -11,6 +11,9 @@ const routerWithSockets = (io) => {
     const fetchComments = (data = {}) => {
       console.log('fetchComments', data)
       const nextPageToken = data.nextPageToken;
+      if (nextPageToken === 'lastPage') {
+        return
+      }
       let i = data.i ? data.i : 0;
 
       if (i++ > 1) {
@@ -37,7 +40,10 @@ const routerWithSockets = (io) => {
           socket.emit("fetched-comment-threads", {error: err, message: "Could not fetch Comments."});
         } else {
           const comments = parseComments(data);
-          const nextPageToken = data.nextPageToken;
+          let nextPageToken = data.nextPageToken;
+          if (!nextPageToken) {
+            nextPageToken = 'lastPage'
+          }
           socket.emit("fetched-comment-threads", {comments, nextPageToken});
           fetchComments({i, nextPageToken})
         }
