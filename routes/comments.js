@@ -8,22 +8,43 @@ const VIDEO_ID = "wVhJ_d4JrbY";
 
 const routerWithSockets = (io) => {
   io.on('connection', (socket) => {
-    socket.on('fetch-comment-threads', () => {
-      youtube.commentThreads.list({
-        maxResults: 100,
-        order: "relevance",
+    const fetchComments = (data = {}) => {
+      console.log('fetchComments', data)
+      const nextPageToken = data.nextPageToken;
+      let i = data.i ? data.i : 0;
+
+      if (i++ > 1) {
+        return
+      }
+
+      const params = {
+        maxResults: 2,
+        // order: "relevance",
         part: "snippet,replies",
         videoId: VIDEO_ID
-      }, (err, data) => {
+      };
+
+      if (nextPageToken) {
+        params.pageToken = nextPageToken;
+      }
+
+      youtube.commentThreads.list(params, (err, data) => {
         if (err) {
           console.error(err);
+          if(err.message === "No access or refresh token is set.") {
+            // TODO: do sth
+          }
           socket.emit("fetched-comment-threads", {error: err, message: "Could not fetch Comments."});
         } else {
           const comments = parseComments(data);
-          socket.emit("fetched-comment-threads", {page: 1, comments: comments});
+          const nextPageToken = data.nextPageToken;
+          socket.emit("fetched-comment-threads", {comments, nextPageToken});
+          fetchComments({i, nextPageToken})
         }
       });
-    });
+    };
+
+    socket.on('fetch-comment-threads', fetchComments);
   });
 
   router.use(authorize.withAccessToken);
@@ -34,15 +55,19 @@ const routerWithSockets = (io) => {
   });
 
   const parseComments = (data) => {
-    const comments = _.map(data.items, (item) => {
-      const textDisplay = item.snippet.topLevelComment.snippet.textDisplay;
+    let comments = _.map(data.items, (item) => {
+      const snippet = item.snippet.topLevelComment.snippet;
+      const publishedAt = snippet.publishedAt;
+      const textDisplay = snippet.textDisplay;
+
       let replies = [];
       if (item.replies && item.replies.comments) {
         replies = parseReplies(item.replies.comments);
       }
-      return {textDisplay, replies};
+      return {textDisplay, publishedAt, replies};
     });
 
+    // comments = _.sortBy(comments, (comment) => comment.publishedAt);
     return comments;
   };
 
