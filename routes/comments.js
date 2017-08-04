@@ -31,7 +31,7 @@ const routerWithSockets = (io) => {
       youtube.commentThreads.list(params, (err, data) => {
         if (err) {
           console.error(err);
-          if(err.message === "No access or refresh token is set.") {
+          if (err.message === "No access or refresh token is set.") {
             // TODO: do sth
           }
           socket.emit("fetched-comment-threads", {error: err, message: "Could not fetch Comments."});
@@ -57,14 +57,11 @@ const routerWithSockets = (io) => {
   const parseComments = (data) => {
     let comments = _.map(data.items, (item) => {
       const snippet = item.snippet.topLevelComment.snippet;
-      const publishedAt = snippet.publishedAt;
-      const textDisplay = snippet.textDisplay;
-
-      let replies = [];
-      if (item.replies && item.replies.comments) {
-        replies = parseReplies(item.replies.comments);
-      }
-      return {textDisplay, publishedAt, replies};
+      // let replies = [];
+      // if (item.replies && item.replies.comments) {
+      //   replies = parseReplies(item.replies.comments);
+      // }
+      return {snippet};
     });
 
     // comments = _.sortBy(comments, (comment) => comment.publishedAt);
