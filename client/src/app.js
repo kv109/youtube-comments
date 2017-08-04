@@ -17,14 +17,13 @@ socket.on('fetched-comment-threads', (data) => {
     $placeholder.append(commentHtml(comment));
   });
 
-  getNextPageLink().remove();
-  $placeholder.append(nextPageLink(nextPageToken));
+  setNextPageLink(nextPageToken);
 });
 
 const commentHtml = (comment) => {
   const html = `
    <div class="comment-renderer">
-   <a href="${comment.authorChannelUrl}" class=" g-hovercard yt-uix-sessionlink     " >  <span class="video-thumb comment-author-thumbnail yt-thumb yt-thumb-48">
+   <a href="${comment.authorChannelUrl}" class=" g-hovercard yt-uix-sessionlink"><span class="video-thumb comment-author-thumbnail yt-thumb yt-thumb-48">
    <span class="yt-thumb-square">
    <span class="yt-thumb-clip">
    <img src="${comment.authorProfileImageUrl}" height="48" width="48" role="img">
@@ -92,17 +91,24 @@ const commentHtml = (comment) => {
   return html;
 };
 
+const bindNextPageLink = () => {
+  getNextPageLink().on("click", (event) => {
+    event.preventDefault();
+    const $this = $(event.currentTarget);
+    const nextPageToken = $this.attr('data-next-page-token');
+    fetchComments({nextPageToken})
+  });
+};
+
 const getNextPageLink = () => $('[data-is=next-page-link]');
 
 const fetchComments = (data = {}) => socket.emit("fetch-comment-threads", data);
 
-const nextPageLink = (nextPageToken) => {
-  const $link = $("<a>", {"data-is": "next-page-link", href: "#", text: "Fetch next 500"});
-  $link.on("click", (event) => {
-    event.preventDefault();
-    fetchComments({nextPageToken})
-  });
-  return $link
+const setNextPageLink = (nextPageToken) => {
+  getNextPageLink().attr('data-next-page-token', nextPageToken);
 };
 
-fetchComments();
+$(document).ready(function() {
+  fetchComments();
+  bindNextPageLink();
+});
