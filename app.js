@@ -6,13 +6,16 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const app = express();
 const server = require('http').createServer(app);
-
-// Websockets
-const io = require('socket.io')(server);
+require("dotenv").config();
 
 global.rootDir = path.resolve(__dirname) + '/';
 global.middlewaresDir = path.join(rootDir, 'middlewares/');
 global.servicesDir = path.join(rootDir, 'services/');
+
+// Websockets
+const authorizeWithJwt = require(middlewaresDir + "/sockets/authorize");
+const io = require('socket.io')(server);
+io.use(authorizeWithJwt);
 
 // Session
 const session = require(middlewaresDir + "/session");

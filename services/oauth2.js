@@ -1,7 +1,7 @@
 const YT_CREDENTIALS = require(rootDir + 'config/youtube_credentials.json');
 const Youtube = require("youtube-api");
 
-const oauth = {
+const YoutubeAPI = {
   oauth: Youtube.authenticate({
     type: "oauth",
     client_id: YT_CREDENTIALS.web.client_id,
@@ -18,4 +18,4 @@ const oauth = {
 };
 
 
-module.exports = oauth;
+module.exports = YoutubeAPI;

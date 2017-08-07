@@ -1,24 +1,33 @@
 const io = require('socket.io-client');
 const env = require(`../${process.env.NODE_ENV}`);
-const socket = io.connect(env.webSocketApiUrl);
 
-socket.on('fetched-comment-threads', (data) => {
-  console.log('fetched-comment-threads', data)
-  if (data.error) {
-    return;
-  }
+let socket = null;
 
-  const comments = data.comments;
-  const nextPageToken = data.nextPageToken;
-  const $placeholder = $("[data-is=comments-placeholder]");
-
-  comments.forEach((comment) => {
-    comment = comment.snippet;
-    $placeholder.append(commentHtml(comment));
+const bindSockets = (jwtToken, callback) => {
+  socket = io.connect(env.webSocketApiUrl, {
+    query: 'token=' + jwtToken
   });
 
-  setNextPageLink(nextPageToken);
-});
+  socket.on('connect', () => {
+    socket.on('fetched-comment-threads', (data) => {
+      if (data.error) {
+        return;
+      }
+
+      const comments = data.comments;
+      const nextPageToken = data.nextPageToken;
+      const $placeholder = $("[data-is=comments-placeholder]");
+
+      comments.forEach((comment) => {
+        comment = comment.snippet;
+        $placeholder.append(commentHtml(comment));
+      });
+
+      setNextPageLink(nextPageToken);
+    });
+    callback();
+  });
+};
 
 const commentHtml = (comment) => {
   const html = `
@@ -109,6 +118,10 @@ const setNextPageLink = (nextPageToken) => {
 };
 
 $(document).ready(function() {
-  fetchComments();
-  bindNextPageLink();
+  $.getJSON('/jwt', (data) => {
+    bindSockets(data.token, () => {
+      fetchComments();
+      bindNextPageLink();
+    });
+  });
 });
