@@ -1,0 +1,7 @@
+{
+  "ignore": [
+    "client",
+    "public/javascripts/app.js",
+    "public/javascripts/app.map"
+  ]
+}
