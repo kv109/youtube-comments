@@ -1,7 +1,8 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const oauth = require(servicesDir + 'oauth2');
-const authorize = require(rootDir + '/middlewares/authorize');
+const oauth = require(servicesDir + "oauth2").oauth;
+const authorize = require(rootDir + "/middlewares/authorize");
+const youtube = require("youtube-api");
 
 router.get('/dashboard', authorize.withAccessToken, (req, res) => {
   res.render('dashboard');
