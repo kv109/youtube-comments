@@ -1,8 +1,8 @@
-const redis = require("redis");
 const session = require("express-session");
 const redisStore = require("connect-redis")(session);
-const redisClient = redis.createClient({url: process.env.REDIS_URL});
-require('dotenv').config();
+require("dotenv").config();
+
+const redisClient = require(servicesDir + "redis_client");
 
 module.exports = session({
   secret: process.env.SECRET,
