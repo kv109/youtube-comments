@@ -1,4 +1,5 @@
 const io = require('socket.io-client');
+const errorHandler = require('./error_handler');
 
 const authorize = (opts) => {
   $.getJSON('/jwt', (data) => {
@@ -18,9 +19,11 @@ const connect = (jwtToken, opts) => {
     onSuccess(socket);
   });
 
-  socket.on('disconnect', () => {
+  socket.on('disconnect', (data) => {
     onError(socket);
-  })
+  });
+
+  socket.on('error', errorHandler);
 };
 
 module.exports = authorize;
