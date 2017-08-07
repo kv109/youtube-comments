@@ -19,10 +19,10 @@ router.get('/oauth2callback', (req, res) => {
   oauth.getToken(code, (err, tokens) => {
     if (err) {
       res.render("error", {error: err, message: "Could not authorize."});
+    } else {
+      req.session.tokens = tokens;
+      res.redirect("/dashboard");
     }
-
-    req.session.tokens = tokens;
-    res.redirect("/dashboard");
   })
 });
 
