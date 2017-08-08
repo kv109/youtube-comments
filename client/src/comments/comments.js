@@ -15,6 +15,7 @@ const bindNextPageLink = () => {
 const bindSockets = (callback) => {
   socket.on("fetched-comment-threads", (data) => {
     if (data.error) {
+      alert(data.error);
       return;
     }
 

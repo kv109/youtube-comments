@@ -6,7 +6,7 @@ const authenticateWithAccessToken = (req, res, next) => {
   const redirectToSignInPage = () => res.redirect('/');
 
   if (tokens) {
-    authenticate({});
+    authenticate(tokens); // If tokens are invalid, user won't be able to use YT API.
     next();
   } else {
     redirectToSignInPage();

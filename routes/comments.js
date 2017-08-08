@@ -33,11 +33,7 @@ const routerWithSockets = (io) => {
 
       youtube.commentThreads.list(params, (err, data) => {
         if (err) {
-          console.error(err);
-          if (err.message === "No access or refresh token is set.") {
-            // TODO: do sth
-          }
-          socket.emit("fetched-comment-threads", {error: err, message: "Could not fetch Comments."});
+          socket.emit("fetched-comment-threads", {error: "Could not fetch comments. Please try to sign in again."});
         } else {
           const comments = parseComments(data);
           let nextPageToken = data.nextPageToken;
