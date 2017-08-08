@@ -3,7 +3,25 @@ html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css')
     script(src='/javascripts/app.js')
   body
-    a(href="/") Home
-    block content
+    nav.navbar.navbar-toggleable-md.navbar-inverse.fixed-top.bg-inverse
+      button.navbar-toggler.navbar-toggler-right(type='button', data-toggle='collapse', data-target='#navbarsExampleDefault', aria-controls='navbarsExampleDefault', aria-expanded='false', aria-label='Toggle navigation')
+        span.navbar-toggler-icon
+      a.navbar-brand(href='/dashboard') YTHelper
+      #navbarsExampleDefault.collapse.navbar-collapse
+        ul.navbar-nav.mr-auto
+          li.nav-item.active
+            a.nav-link(href='/dashboard')
+              | Home
+              span.sr-only (current)
+          li.nav-item
+            a.nav-link(href='/comments') Comments
+    .container
+      .row
+        .col-md-12
+          block content
+      hr
+      footer
+        p © Company 2017
