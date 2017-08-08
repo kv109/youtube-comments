@@ -1,6 +1,8 @@
 extends ../layout
 
 block content
+    div(data-load="comments/comments")
+
     link(rel='stylesheet' href='/stylesheets/youtube.css')
 
     #comment-section-renderer.yt-comments(data-is="comments-placeholder")

@@ -1,3 +1,9 @@
 window.env = require(`../${process.env.NODE_ENV}`);
 
-require('./comments/comments');
+$(() => {
+  const scriptToLoad = $('[data-load]').attr('data-load');
+  if(scriptToLoad) {
+    console.log('Loading ', scriptToLoad);
+    require(`./${scriptToLoad}`);
+  }
+});

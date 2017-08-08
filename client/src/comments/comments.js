@@ -42,17 +42,15 @@ const setNextPageLink = (nextPageToken) => {
   getNextPageLink().attr('data-next-page-token', nextPageToken);
 };
 
-$(document).ready(function() {
-  authorizeSockets(
-    {
-      success: (authorizedSocket) => {
-        socket = authorizedSocket;
-        bindSockets(() => {
-          fetchComments();
-          bindNextPageLink();
-        })
-      },
-      error: () => console.log('error')
-    }
-  );
-});
+authorizeSockets(
+  {
+    success: (authorizedSocket) => {
+      socket = authorizedSocket;
+      bindSockets(() => {
+        fetchComments();
+        bindNextPageLink();
+      })
+    },
+    error: () => console.log('error')
+  }
+);
