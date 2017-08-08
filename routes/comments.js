@@ -4,12 +4,12 @@ const _ = require("lodash");
 const youtube = require("youtube-api");
 const authorize = require(rootDir + "/middlewares/authorize");
 
-const VIDEO_ID = "wVhJ_d4JrbY";
-
 const routerWithSockets = (io) => {
+  //TODO: move sockets API to somewhere else (routes/sockets/comments.js?)
   io.on('connection', (socket) => {
+
     const fetchComments = (data = {}) => {
-      console.log('fetchComments', data)
+      const videoId = data.videoId;
       const nextPageToken = data.nextPageToken;
       if (nextPageToken === 'lastPage') {
         return
@@ -23,8 +23,8 @@ const routerWithSockets = (io) => {
       const params = {
         maxResults: 2,
         // order: "relevance",
-        part: "snippet,replies",
-        videoId: VIDEO_ID
+        part: "snippet",
+        videoId: videoId
       };
 
       if (nextPageToken) {
@@ -33,7 +33,15 @@ const routerWithSockets = (io) => {
 
       youtube.commentThreads.list(params, (err, data) => {
         if (err) {
-          socket.emit("fetched-comment-threads", {error: "Could not fetch comments. Please try to sign in again."});
+          const emitError = (error) => socket.emit("fetched-comment-threads", {error: error});
+
+          if (err.code === 401 || err.message === "No access or refresh token is set.") {
+            emitError("Looks like your session has expired. Please try to sign in again.");
+          } else if (err.code === 404) {
+            emitError(`Could not find video with id=${videoId}`);
+          } else {
+            emitError("Could not fetch comments.");
+          }
         } else {
           const comments = parseComments(data);
           let nextPageToken = data.nextPageToken;
@@ -41,7 +49,7 @@ const routerWithSockets = (io) => {
             nextPageToken = 'lastPage'
           }
           socket.emit("fetched-comment-threads", {comments, nextPageToken});
-          fetchComments({i, nextPageToken})
+          fetchComments({i, nextPageToken, videoId})
         }
       });
     };
@@ -52,33 +60,28 @@ const routerWithSockets = (io) => {
   router.use(authorize.withAccessToken);
 
   router.get('/', (req, res) => {
-    const comments = [];
-    res.render("comments/index", {comments});
+    let alert = {};
+    const videoUrl = req.query.video_url;
+    const videoId = videoUrl && videoUrl.slice(-11);
+    if (!(videoId && videoId.length == 11)) {
+      alert.text = "Please provide a valid YouTube video URL, for example https://www.youtube.com/watch?v=wVhJ_d4JrbY";
+      alert.type = "alert-danger";  // TODO: extract to Alert object
+    }
+
+    if (alert.text) {
+      res.render("dashboard", {alert});
+    } else {
+      res.render("comments/index", {videoId, alert});
+    }
   });
 
   const parseComments = (data) => {
     let comments = _.map(data.items, (item) => {
       const snippet = item.snippet.topLevelComment.snippet;
-      // let replies = [];
-      // if (item.replies && item.replies.comments) {
-      //   replies = parseReplies(item.replies.comments);
-      // }
       return {snippet};
     });
 
-    // comments = _.sortBy(comments, (comment) => comment.publishedAt);
     return comments;
-  };
-
-  const parseReplies = (replies) => {
-    replies = _.map(replies, (reply) => {
-        const textDisplay = reply.snippet.textDisplay;
-        const publishedAt = reply.snippet.publishedAt;
-        return {textDisplay, publishedAt}
-      }
-    );
-    replies = _.sortBy(replies, (item) => item.publishedAt);
-    return replies;
   };
 
   return router;

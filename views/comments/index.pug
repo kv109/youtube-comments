@@ -1,10 +1,15 @@
 extends ../layout
 
 block content
-    div(data-load="comments/comments")
-
+    div(data-load="comments/comments" data-video-id=videoId)
     link(rel='stylesheet' href='/stylesheets/youtube.css')
-
-    #comment-section-renderer.yt-comments(data-is="comments-placeholder")
-
-    a(href="#" data-is="next-page-link" data-next-page-token) Fetch next 500
+    .row
+        .col-12
+            section Fetching comments for video with ID
+                |
+                |
+                code= videoId
+    .row
+        .col-12.mt-5
+            #comment-section-renderer.yt-comments(data-is="comments-placeholder")
+            a(href="#" data-is="next-page-link" data-next-page-token) Fetch next 500

@@ -1,8 +1,15 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+.logo-text {
+  color: #00b392 !important;
 }
 
-a {
-  color: #00B7FF;
+.btn-brand {
+  background-color: #00b392;
+  border-color: #00b392;
+  color: white;
+}
+
+.btn-brand:hover {
+  background-color: #008066;
+  border-color: #008066;
+  color: white;
 }

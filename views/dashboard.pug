@@ -1,9 +1,14 @@
 extends layout
 
 block content
-    p Authorization successfull.
-        |
-        | See
-        |
-        a(href="/comments") comments
-        |.
+    if notice
+        block notice
+    .row
+        .col-12
+            section
+                | For now YTHelper supports only fast comments fetching.
+    .row
+        .col-12.pt-3
+            form.form-inline(action="/comments" method="get")
+                input.form-control.mr-4(autofocus="true" name="video_url" type='text', placeholder='Enter YouTube video URL' size=45)
+                button.btn.btn-primary(type='submit') Fetch comments!

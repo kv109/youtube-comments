@@ -15,7 +15,7 @@ const bindNextPageLink = () => {
 const bindSockets = (callback) => {
   socket.on("fetched-comment-threads", (data) => {
     if (data.error) {
-      alert(data.error);
+      console.error(data.error);
       return;
     }
 
@@ -33,9 +33,12 @@ const bindSockets = (callback) => {
   callback();
 };
 
-const getNextPageLink = () => $('[data-is=next-page-link]');
+const getNextPageLink = () => $("[data-is=next-page-link]");
+
+const getVideoId = () => $("[data-video-id]").data('video-id');
 
 const fetchComments = (data = {}) => {
+  data.videoId = getVideoId();
   socket.emit("fetch-comment-threads", data)
 };
 

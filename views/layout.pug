@@ -1,27 +1,30 @@
 doctype html
 html
   head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    title YTHelper
     link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/stylesheets/style.css')
     script(src='/javascripts/app.js')
   body
     nav.navbar.navbar-toggleable-md.navbar-inverse.fixed-top.bg-inverse
       button.navbar-toggler.navbar-toggler-right(type='button', data-toggle='collapse', data-target='#navbarsExampleDefault', aria-controls='navbarsExampleDefault', aria-expanded='false', aria-label='Toggle navigation')
         span.navbar-toggler-icon
-      a.navbar-brand(href='/dashboard') YTHelper
-      #navbarsExampleDefault.collapse.navbar-collapse
+      a.logo-text.navbar-brand(href='/dashboard') YTHelper
+      collapse.navbar-collapse
         ul.navbar-nav.mr-auto
-          li.nav-item.active
-            a.nav-link(href='/dashboard')
-              | Home
-              span.sr-only (current)
           li.nav-item
-            a.nav-link(href='/comments') Comments
-    .container
+            a.nav-link(href='/dashboard') Dashboard
+
+        ul.navbar-nav.float-right
+          li.nav-item
+            a.nav-link(href='/sign_in') Sign in
+    .container.mt-5.p-5
+      if alert && alert.text
+        .alert.alert-dismissible(class=alert.type role='alert')
+          = alert.text
       .row
         .col-md-12
           block content
       hr
       footer
-        p © Company 2017
+        p © Kacper Walanus 2017
