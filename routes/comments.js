@@ -35,7 +35,7 @@ const routerWithSockets = (io) => {
         if (err) {
           const emitError = (error) => socket.emit("fetched-comment-threads", {error: error});
 
-          if (err.code === 401 || err.message === "No access or refresh token is set.") {
+          if (err.code === 401 || err.message === "No access or refresh token is set." || err.message === "invalid_request") {
             emitError("Looks like your session has expired. Please try to sign in again.");
           } else if (err.code === 404) {
             emitError(`Could not find video with id=${videoId}`);
