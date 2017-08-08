@@ -26,7 +26,7 @@ router.get('/oauth2callback', (req, res) => {
     if (err) {
       res.render("error", {error: err, message: "Could not authorize."});
     } else {
-      tokens.jwt = jwtToken();
+      tokens.jwt = jwtToken(tokens);
       req.session.tokens = tokens;
       res.redirect("/dashboard");
     }
@@ -40,8 +40,8 @@ authorizationUrl = () => {
   });
 };
 
-jwtToken = () => {
-  jwt.sign(tokens, process.env.SECRET, {expiresIn: 60 * 60 * 8});  // TODO: handle expiration
+jwtToken = (tokens) => {
+  return jwt.sign(tokens, process.env.SECRET, {expiresIn: 60 * 60 * 8});  // TODO: handle expiration
 };
 
 module.exports = router;
