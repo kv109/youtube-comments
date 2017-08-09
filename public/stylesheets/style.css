@@ -1,7 +1,3 @@
-.logo-text {
-  color: #00b392 !important;
-}
-
 .btn-brand {
   background-color: #00b392;
   border-color: #00b392;
@@ -12,4 +8,12 @@
   background-color: #008066;
   border-color: #008066;
   color: white;
+}
+
+.container {
+  min-height: 500px;
+}
+
+.logo-text {
+  color: #00b392 !important;
 }
