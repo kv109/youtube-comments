@@ -1,15 +1,15 @@
 const path = require('path');
-const BUILD_DIR = path.resolve(__dirname, 'src/public');
+const BUILD_DIR = path.resolve(__dirname, '../public/javascripts');
 const APP_DIR = path.resolve(__dirname, 'src');
 const webpack = require('webpack');
 
 const config = {
   devtool: 'cheap-module-source-map',
-  entry: APP_DIR + '/popup.js',
+  entry: APP_DIR + '/app.js',
   output: {
     path: BUILD_DIR,
-    filename: 'bundle-popup.js',
-    sourceMapFilename: 'bundle-popup.map'
+    filename: 'app.js',
+    sourceMapFilename: 'app.map'
   },
   module : {
     loaders : [

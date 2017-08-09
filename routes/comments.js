@@ -16,12 +16,12 @@ const routerWithSockets = (io) => {
       }
       let i = data.i ? data.i : 0;
 
-      if (i++ > 1) {
+      if (i++ > 4) {
         return
       }
 
       const params = {
-        maxResults: 2,
+        maxResults: 100,
         // order: "relevance",
         part: "snippet",
         videoId: videoId

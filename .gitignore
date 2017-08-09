@@ -1,5 +1,6 @@
 node_modules
 client/node_modules
-.env
+.env*
+!.env.example
 config/youtube_credentials.json
 
