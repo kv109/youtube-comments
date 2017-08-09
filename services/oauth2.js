@@ -10,7 +10,7 @@ const oauth = Youtube.authenticate({
 
 const YoutubeAPI = {
   oauth: oauth,
-  authenticateWithTokens: (tokens) => {
+  setCredentials: (tokens) => {
     oauth.setCredentials(tokens);
   }
 };
