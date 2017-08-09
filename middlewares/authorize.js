@@ -7,6 +7,7 @@ const authenticateWithAccessToken = (req, res, next) => {
 
   if (tokens) {
     YoutubeAPI.setCredentials(tokens); // If tokens are invalid, user won't be able to use YT API.
+    res.locals.currentUser = req.session.currentUser;
     next();
   } else {
     redirectToSignInPage();

@@ -18,6 +18,11 @@ router.get('/sign_in', (req, res) => {
   res.render('sign_in', {authorizationUrl: authorizationUrl()});
 });
 
+router.get('/sign_out', (req, res) => {
+  req.session.destroy();
+  res.redirect("/sign_in");
+});
+
 router.get('/oauth2callback', (req, res) => {
   console.log("Fetch tokens with code: ", req.query.code);
   const code = req.query.code;

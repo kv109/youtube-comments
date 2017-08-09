@@ -1,32 +1,42 @@
 doctype html
 html
-  head
-    title YTHelper
-    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css')
-    link(rel='stylesheet', href='/stylesheets/style.css')
-    script(src='/javascripts/app.js')
-  body
-    nav.navbar.navbar-toggleable-md.navbar-inverse.fixed-top.bg-inverse
-      button.navbar-toggler.navbar-toggler-right(type='button', data-toggle='collapse', data-target='#navbarsExampleDefault', aria-controls='navbarsExampleDefault', aria-expanded='false', aria-label='Toggle navigation')
-        span.navbar-toggler-icon
-      a.logo-text.navbar-brand(href='/dashboard') YTHelper
-      collapse.navbar-collapse
-        ul.navbar-nav.mr-auto
-          li.nav-item
-            a.nav-link(href='/dashboard') Dashboard
+    head
+        title YTHelper
+        link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css')
+        link(rel='stylesheet', href='/stylesheets/style.css')
+        script(src='/javascripts/app.js')
+    body
+        nav.navbar.navbar-toggleable-md.navbar-inverse.fixed-top.bg-inverse
+            button.navbar-toggler.navbar-toggler-right(type='button', data-toggle='collapse', data-target='#navbarsExampleDefault', aria-controls='navbarsExampleDefault', aria-expanded='false', aria-label='Toggle navigation')
+                span.navbar-toggler-icon
+            a.logo-text.navbar-brand(href='/dashboard') YTHelper
+            collapse.navbar-collapse
+                ul.navbar-nav.mr-auto
+                    if currentUser
+                        li.nav-item
+                            a.nav-link(href='/dashboard') Dashboard
 
-        ul.navbar-nav.float-right
-          li.nav-item
-            a.nav-link(href='/sign_in') Sign in
-    .container.mt-5.p-5
-      if alert && alert.text
-        .alert.alert-dismissible(class=alert.type role='alert')
-          = alert.text
-      .row
-        .col-md-12
-          block content
-    .row
-      .col-12.offset-1
-        hr
-        footer
-          p © Kacper Walanus 2017
+                ul.navbar-nav.float-right
+                    li.nav-item
+                        if currentUser
+                            a.nav-link(href='/sign_out') Sign out
+                                |
+                                |
+                                small (#{currentUser.name})
+                        else
+                            a.nav-link(href='/sign_in') Sign in
+        .container.mt-5.p-5
+            if alert && alert.text
+                .alert.alert-dismissible(class=alert.type role='alert')
+                    = alert.text
+            .row
+                .col-md-12
+                    block content
+        .row
+            .col-10.offset-1
+                hr
+                footer
+                    p © Kacper Walanus 2017
+                        small.float-right This service was built for KG as a thank you for countless hours spent with his great content.
+
+
