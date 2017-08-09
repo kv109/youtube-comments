@@ -5,11 +5,15 @@ block content
     link(rel='stylesheet' href='/stylesheets/youtube.css')
     .row
         .col-12
-            section Fetching comments for video with ID
+            h3 Comments for video with ID
                 |
                 |
-                code= videoId
+                code
+                    a(href=`https://www.youtube.com/watch?v=${videoId}` target="_BLANK")= videoId
     .row
         .col-12.mt-5
             #comment-section-renderer.yt-comments(data-is="comments-placeholder")
-            a(href="#" data-is="next-page-link" data-next-page-token) Fetch next 500
+
+    .row
+        .col-12.mt-5.text-center
+            a(class="btn btn-secondary text-center" href="#" data-is="next-page-link" data-next-page-token) Fetch next 500

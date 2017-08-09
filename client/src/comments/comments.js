@@ -43,7 +43,11 @@ const fetchComments = (data = {}) => {
 };
 
 const setNextPageLink = (nextPageToken) => {
-  getNextPageLink().attr('data-next-page-token', nextPageToken);
+  const $nextPageLink = getNextPageLink();
+  $nextPageLink.attr('data-next-page-token', nextPageToken);
+  if (nextPageToken === "lastPage") {
+    $nextPageLink.attr({disabled: "disabled", "aria-disabled": true}).text("There are no more comments");
+  }
 };
 
 authorizeSockets(
