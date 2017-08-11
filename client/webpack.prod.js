@@ -28,6 +28,7 @@ const config = {
     }),
     new webpack.ProvidePlugin({ // TODO: extract common parts like this
       $: APP_DIR + "/jquery.js",
+      jQuery: APP_DIR + "/jquery.js"
     })
   ]
 };

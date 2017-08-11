@@ -1,5 +1,6 @@
-const commentTemplate = require('./comment_template');
 const authorizeSockets = require('../sockets/authorize');
+const commentTemplate = require('./comment_template');
+const Flash = require("../modules/flash");
 
 let socket;
 

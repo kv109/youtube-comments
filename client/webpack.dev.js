@@ -25,6 +25,7 @@ const config = {
     }),
     new webpack.ProvidePlugin({
       $: APP_DIR + "/jquery.js",
+      jQuery: APP_DIR + "/jquery.js"
     })
   ]
 };

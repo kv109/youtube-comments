@@ -26,9 +26,12 @@ html
                         else
                             a.nav-link(href='/sign_in') Sign in
         .container.mt-5.p-5
-            if alert && alert.text
-                .alert.alert-dismissible(class=alert.type role='alert')
-                    = alert.text
+            div(data-is="alert-container")
+                if alert && alert.text
+                    .alert.alert-dismissible.fade.show(class=`alert-${alert.type || "info"}` role='alert')
+                        button.close(type='button', data-dismiss='alert', aria-label='Close')
+                            span(aria-hidden='true') &times;
+                        = alert.text
             .row
                 .col-md-12
                     block content

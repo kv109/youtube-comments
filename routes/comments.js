@@ -65,7 +65,7 @@ const routerWithSockets = (io) => {
     const videoId = videoUrl && videoUrl.slice(-11);
     if (!(videoId && videoId.length == 11)) {
       alert.text = "Please provide a valid YouTube video URL, for example https://www.youtube.com/watch?v=wVhJ_d4JrbY";
-      alert.type = "alert-danger";  // TODO: extract to Alert object
+      alert.type = "danger";  // TODO: extract to Alert object
     }
 
     if (alert.text) {
