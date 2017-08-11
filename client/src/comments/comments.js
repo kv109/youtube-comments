@@ -15,11 +15,6 @@ const bindNextPageLink = () => {
 
 const bindSockets = (callback) => {
   socket.on("comment-threads-fetched", (data) => {
-    if (data.error) {
-      Flash.display(data.error, "danger");
-      return;
-    }
-
     const comments = data.comments;
     const nextPageToken = data.nextPageToken;
     const $placeholder = $("[data-is=comments-placeholder]");
@@ -41,6 +36,16 @@ const bindSockets = (callback) => {
   socket.on("all-comment-threads-fetched", () => {
     $("[data-is=all-comments-fetched-text]").removeClass("invisible");
     getSpinner().remove();
+  });
+
+  socket.on("video-details-fetched", (data) => {
+    const $link = $("<a>", {
+      href: `https://www.youtube.com/watch?v=${data.id}`,
+      target: "_BLANK",
+      text: data.snippet.title
+    });
+    $("[data-is=video-label]").append($link);
+    $("[data-is=video-thumbnail]").attr({"src": data.snippet.thumbnails.default.url});
   })
 };
 
@@ -54,6 +59,11 @@ const fetchComments = (data = {}) => {
   socket.emit("fetch-comment-threads", data)
 };
 
+const fetchVideoDetails = () => {
+  const videoId = getVideoId();
+  socket.emit("fetch-video-details", {videoId})
+};
+
 const setNextPageLink = (nextPageToken) => {
   const $nextPageLink = getNextPageLink();
   $nextPageLink.attr('data-next-page-token', nextPageToken);
@@ -65,6 +75,7 @@ authorizeSockets(
       socket = authorizedSocket;
       bindSockets(() => {
         fetchComments();
+        fetchVideoDetails();
         bindNextPageLink();
       })
     },

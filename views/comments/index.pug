@@ -4,16 +4,18 @@ block content
     div(data-load="comments/comments" data-video-id=videoId)
     link(rel='stylesheet' href='/stylesheets/youtube.css')
     .row
-        .col-12
-            h3 Comments for video with ID
-                |
-                |
-                code
-                    a(href=`https://www.youtube.com/watch?v=${videoId}` target="_BLANK")= videoId
-            section.my-4
-                form.form-inline(action="/comments" method="get")
-                    input.form-control.mr-4(id="video_url" name="video_url" type='text', placeholder='Enter another YouTube video URL' size=45)
-                    button.btn.btn-primary(type='submit') Fetch comments!
+        .col-8.offset-2.mb-2
+            form.form-inline(action="/comments" method="get")
+                input.form-control.mr-4(id="video_url" name="video_url" type='text', placeholder='Enter another YouTube video URL' size=45)
+                button.btn.btn-primary(type='submit') Fetch comments!
+    hr
+    .row
+        .col-8.offset-2.mt-2
+            .text-center
+                h4 Comments for
+                h5.p-3(data-is="video-label")
+        .col-2
+                img(data-is="video-thumbnail" width="120" height="90")
 
     .row
         .col-12.mt-5

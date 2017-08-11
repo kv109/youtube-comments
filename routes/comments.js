@@ -31,15 +31,7 @@ const routerWithSockets = (io) => {
 
       youtube.commentThreads.list(params, (err, data) => {
         if (err) {
-          const emitError = (error) => socket.emit("comment-threads-fetched", {error: error});
-
-          if (err.code === 401 || err.message === "No access or refresh token is set." || err.message === "invalid_request") {
-            emitError("Looks like your session has expired. Please try to sign in again.");
-          } else if (err.code === 404) {
-            emitError(`Could not find video with id=${videoId}`);
-          } else {
-            emitError("Could not fetch comments.");
-          }
+          handleError(err);
         } else {
           const comments = parseComments(data);
           let nextPageToken = data.nextPageToken;
@@ -55,7 +47,38 @@ const routerWithSockets = (io) => {
       });
     };
 
+    const fetchVideoDetails = (data) => {
+      const videoId = data.videoId;
+
+      const params = {
+        id: videoId,
+        part: "snippet"
+      };
+
+      youtube.videos.list(params, (err, data) => {
+        if (err) {
+          handleError(err);
+        } else {
+          const videoDetails = data.items[0];
+          socket.emit("video-details-fetched", videoDetails);
+        }
+      });
+    };
+
+    const handleError = (err) => {
+      const emitError = (error) => socket.error({error: error});  // TODO: extract to Error service
+
+      if (err.code === 401 || err.message === "No access or refresh token is set." || err.message === "invalid_request") {
+        emitError("Looks like your session has expired. Please try to sign in again.");
+      } else if (err.code === 404) {
+        emitError(`Could not find video with id=${videoId}`);
+      } else {
+        emitError("Could not fetch comments.");
+      }
+    };
+
     socket.on('fetch-comment-threads', fetchComments);
+    socket.on('fetch-video-details', fetchVideoDetails);
   });
 
   router.use(authorize.withAccessToken);
