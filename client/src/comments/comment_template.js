@@ -36,7 +36,6 @@ module.exports = (comment) => {
             </span>
             <div class="yt-uix-menu-container comment-renderer-action-menu yt-section-hover-container">
                <div class="yt-uix-menu yt-uix-menu-flipped hide-until-delayloaded">
-                  <button class="yt-uix-button yt-uix-button-size-default yt-uix-button-action-menu yt-uix-button-empty yt-uix-button-has-icon no-icon-markup  yt-uix-menu-trigger" type="button" onclick=";return false;" role="button" aria-label="Action menu." aria-haspopup="true" aria-pressed="false"><span class="yt-uix-button-arrow yt-sprite"></span></button>
                   <div class="yt-uix-menu-content yt-ui-menu-content yt-uix-menu-content-hidden" role="menu">
                      <ul>
                         <li role="menuitem">
