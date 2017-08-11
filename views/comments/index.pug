@@ -12,7 +12,7 @@ block content
                     a(href=`https://www.youtube.com/watch?v=${videoId}` target="_BLANK")= videoId
             section.my-4
                 form.form-inline(action="/comments" method="get")
-                    input.form-control.mr-4(id="video_url" name="video_url" type='text', placeholder='Enter YouTube video URL' size=45)
+                    input.form-control.mr-4(id="video_url" name="video_url" type='text', placeholder='Enter another YouTube video URL' size=45)
                     button.btn.btn-primary(type='submit') Fetch comments!
 
     .row

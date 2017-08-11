@@ -1,12 +1,8 @@
 extends layout
 
 block content
-    h1 Welcome to
-        |
-        |
-        span.logo-text YTHelper
-        | !
-
     .row
         .col-12.pt-5
-            a.btn.btn-brand.btn-lg(href=authorizationUrl, role='button') Sign in with YouTube
+            .text-center
+                div.mb-5 To continue, please sign in.
+                a.btn.btn-brand(href=authorizationUrl, role='button') Sign in with YouTube
