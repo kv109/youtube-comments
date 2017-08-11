@@ -1,8 +1,10 @@
+const Flash = require("../modules/flash");
+
 module.exports = (data) => {
   const error = data.error;
   if (error === "TokenExpiredError") {
-    alert('Your session has expired, please sign in again.')
+    Flash.display("Your session has expired, please sign in again.", "danger");
   } else {
-    console.log(data);
+    Flash.display(error, "danger");
   }
 };
