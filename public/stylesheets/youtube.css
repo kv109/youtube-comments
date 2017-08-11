@@ -9401,7 +9401,7 @@
 }
 
 .yt-comments .comment-renderer-text-content {
-    max-height: 65px;
+    /*max-height: 65px;*/
     overflow: hidden;
     white-space: pre-wrap;
     word-wrap: break-word;
