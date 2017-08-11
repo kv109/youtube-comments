@@ -27,11 +27,13 @@ html
                             a.nav-link(href='/sign_in') Sign in
         .container.mt-5.p-5
             div(data-is="alert-container")
-                if alert && alert.text
-                    .alert.alert-dismissible.fade.show(class=`alert-${alert.type || "info"}` role='alert')
-                        button.close(type='button', data-dismiss='alert', aria-label='Close')
-                            span(aria-hidden='true') &times;
-                        = alert.text
+                - messages = getMessages()
+                each type in Object.keys(messages)
+                        - message = messages[type]
+                        .alert.alert-dismissible.fade.show(class=`alert-${type}` role='alert')
+                            button.close(type='button', data-dismiss='alert', aria-label='Close')
+                                span(aria-hidden='true') &times;
+                            = message
             .row
                 .col-md-12
                     block content

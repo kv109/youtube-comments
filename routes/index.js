@@ -47,6 +47,7 @@ router.get('/oauth2callback', (req, res) => {
           tokens.jwt = jwtToken(tokens);
           req.session.tokens = tokens;
           req.session.currentUser = { name: channelTitle };
+          req.flash("success", `Successfully signed in as ${channelTitle}.`);
           res.redirect("/dashboard");
         }
       });

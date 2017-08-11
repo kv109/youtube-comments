@@ -10,6 +10,7 @@ const authenticateWithAccessToken = (req, res, next) => {
     res.locals.currentUser = req.session.currentUser;
     next();
   } else {
+    req.flash("warning", "Your session has expired.");
     redirectToSignInPage();
   }
 };

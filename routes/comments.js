@@ -60,18 +60,18 @@ const routerWithSockets = (io) => {
   router.use(authorize.withAccessToken);
 
   router.get('/', (req, res) => {
-    let alert = {};
+    let error;
     const videoUrl = req.query.video_url;
     const videoId = videoUrl && videoUrl.slice(-11);
     if (!(videoId && videoId.length == 11)) {
-      alert.text = "Please provide a valid YouTube video URL, for example https://www.youtube.com/watch?v=wVhJ_d4JrbY";
-      alert.type = "danger";  // TODO: extract to Alert object
+      error = "Please provide a valid YouTube video URL, for example https://www.youtube.com/watch?v=wVhJ_d4JrbY";
     }
 
-    if (alert.text) {
-      res.render("dashboard", {alert});
+    if (error) {
+      req.flash("danger", error);
+      res.render("dashboard");
     } else {
-      res.render("comments/index", {videoId, alert});
+      res.render("comments/index", {videoId});
     }
   });
 

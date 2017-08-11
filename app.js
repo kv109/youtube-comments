@@ -17,9 +17,6 @@ const authorizeWithJwt = require(middlewaresDir + "/sockets/authorize");
 const io = require('socket.io')(server);
 io.use(authorizeWithJwt);
 
-// Session
-const session = require(middlewaresDir + "/session");
-
 // Routes
 const index = require('./routes/index');
 const comments = require('./routes/comments')(io);
@@ -28,8 +25,11 @@ const comments = require('./routes/comments')(io);
 app.set('views', path.join(rootDir, 'views'));
 app.set('view engine', 'pug');
 
-// session setup
-app.use(session);
+// session
+app.use(require(middlewaresDir + "/session"));
+
+// flash messages
+app.use(require('express-flash-messages')());
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
