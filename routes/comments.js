@@ -19,9 +19,9 @@ const routerWithSockets = (io) => {
       }
 
       const params = {
-        maxResults: 100,
-        // order: "relevance",
-        part: "snippet",
+        maxResults: 4,
+        order: "relevance",
+        part: "snippet,replies",
         videoId: videoId
       };
 
@@ -101,8 +101,17 @@ const routerWithSockets = (io) => {
 
   const parseComments = (data) => {
     let comments = _.map(data.items, (item) => {
+      let replies = null;
+      if (item.replies) {
+        replies = item.replies.comments;
+      }
+      const id = item.snippet.topLevelComment.id;
       const snippet = item.snippet.topLevelComment.snippet;
-      return {snippet};
+      const data = {id, snippet};
+      if (replies) {
+        data.replies = replies;
+      }
+      return data;
     });
 
     return comments;

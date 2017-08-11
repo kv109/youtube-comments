@@ -63,7 +63,6 @@ module.exports = (comment) => {
       </div>
    </div>
 </div>
-<br />
   `;
   return html;
 };

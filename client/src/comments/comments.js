@@ -1,8 +1,11 @@
 const authorizeSockets = require('../sockets/authorize');
 const commentTemplate = require('./comment_template');
-const Flash = require("../modules/flash");
 
 let socket;
+
+const appendReplies = (commentId) => {
+  console.log(commentId)
+};
 
 const bindNextPageLink = () => {
   getNextPageLink().on("click", (event) => {
@@ -20,8 +23,13 @@ const bindSockets = (callback) => {
     const $placeholder = $("[data-is=comments-placeholder]");
 
     comments.forEach((comment) => {
+      const replies = comment.replies;
+      const commentId = comment.id;
       comment = comment.snippet;
       $placeholder.append(commentTemplate(comment));
+      if (replies) {
+        $placeholder.append(showRepliesButton(commentId, replies.length));
+      }
     });
 
     setNextPageLink(nextPageToken);
@@ -50,7 +58,6 @@ const bindSockets = (callback) => {
 };
 
 const getNextPageLink = () => $("[data-is=next-page-link]");
-
 const getSpinner = () => $("[data-is=spinner]");
 const getVideoId = () => $("[data-video-id]").data('video-id');
 
@@ -67,6 +74,20 @@ const fetchVideoDetails = () => {
 const setNextPageLink = (nextPageToken) => {
   const $nextPageLink = getNextPageLink();
   $nextPageLink.attr('data-next-page-token', nextPageToken);
+};
+
+const showRepliesButton = (commentId, repliesCount) => {
+  const $button = $("<div>", {
+    class: "btn btn-small btn-secondary my-2",
+    css: {
+      color: "gray",
+      fontSize: "smaller"
+    },
+    text: `Show replies (${repliesCount})`,
+    role: "button"
+  }).on("click", () => appendReplies(commentId));
+
+  return $button
 };
 
 authorizeSockets(
