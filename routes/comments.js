@@ -11,12 +11,10 @@ const routerWithSockets = (io) => {
     const fetchComments = (data = {}) => {
       const videoId = data.videoId;
       const nextPageToken = data.nextPageToken;
-      if (nextPageToken === 'lastPage') {
-        return
-      }
       let i = data.i ? data.i : 0;
 
       if (i++ > 4) {
+        socket.emit("comment-threads-batch-fetched");
         return
       }
 
@@ -33,7 +31,7 @@ const routerWithSockets = (io) => {
 
       youtube.commentThreads.list(params, (err, data) => {
         if (err) {
-          const emitError = (error) => socket.emit("fetched-comment-threads", {error: error});
+          const emitError = (error) => socket.emit("comment-threads-fetched", {error: error});
 
           if (err.code === 401 || err.message === "No access or refresh token is set." || err.message === "invalid_request") {
             emitError("Looks like your session has expired. Please try to sign in again.");
@@ -46,10 +44,13 @@ const routerWithSockets = (io) => {
           const comments = parseComments(data);
           let nextPageToken = data.nextPageToken;
           if (!nextPageToken) {
-            nextPageToken = 'lastPage'
+            nextPageToken = 'lastPage';
+            socket.emit("comment-threads-fetched", {comments, nextPageToken});
+            socket.emit("all-comment-threads-fetched");
+          } else {
+            socket.emit("comment-threads-fetched", {comments, nextPageToken});
+            fetchComments({i, nextPageToken, videoId})
           }
-          socket.emit("fetched-comment-threads", {comments, nextPageToken});
-          fetchComments({i, nextPageToken, videoId})
         }
       });
     };

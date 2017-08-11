@@ -17,8 +17,13 @@ block content
 
     .row
         .col-12.mt-5
+            .text-center
+                img(data-is="spinner" src="images/spinner2.gif" alt="Loading" height="36" width="36")
             #comment-section-renderer.yt-comments(data-is="comments-placeholder")
 
     .row
-        .col-12.mt-5.text-center
-            a(class="btn btn-secondary text-center" href="#" data-is="next-page-link" data-next-page-token) Fetch next 500
+        .col-12.mt-3.text-center
+            a.btn.btn-primary.text-center.invisible(href="#" data-is="next-page-link" data-next-page-token) Fetch more
+            div.invisible.text-success(data-is="all-comments-fetched-text")
+                hr
+                | All comments fetched.

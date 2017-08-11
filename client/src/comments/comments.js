@@ -14,7 +14,7 @@ const bindNextPageLink = () => {
 };
 
 const bindSockets = (callback) => {
-  socket.on("fetched-comment-threads", (data) => {
+  socket.on("comment-threads-fetched", (data) => {
     if (data.error) {
       Flash.display(data.error, "danger");
       return;
@@ -32,10 +32,21 @@ const bindSockets = (callback) => {
     setNextPageLink(nextPageToken);
   });
   callback();
+
+  socket.on("comment-threads-batch-fetched", () => {
+    getNextPageLink().removeClass("invisible");
+    getSpinner().remove();
+  });
+
+  socket.on("all-comment-threads-fetched", () => {
+    $("[data-is=all-comments-fetched-text]").removeClass("invisible");
+    getSpinner().remove();
+  })
 };
 
 const getNextPageLink = () => $("[data-is=next-page-link]");
 
+const getSpinner = () => $("[data-is=spinner]");
 const getVideoId = () => $("[data-video-id]").data('video-id');
 
 const fetchComments = (data = {}) => {
@@ -46,9 +57,6 @@ const fetchComments = (data = {}) => {
 const setNextPageLink = (nextPageToken) => {
   const $nextPageLink = getNextPageLink();
   $nextPageLink.attr('data-next-page-token', nextPageToken);
-  if (nextPageToken === "lastPage") {
-    $nextPageLink.attr({disabled: "disabled", "aria-disabled": true}).text("There are no more comments");
-  }
 };
 
 authorizeSockets(
