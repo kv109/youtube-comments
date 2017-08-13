@@ -47,6 +47,25 @@ const routerWithSockets = (io) => {
       });
     };
 
+    const fetchReplies = (data) => {
+      const commentId = data.commentId;
+
+      const params = {
+        maxResults: 100,
+        parentId: commentId,
+        part: "snippet"
+      };
+
+      youtube.comments.list(params, (err, data) => {
+        if (err) {
+          handleError(err);
+        } else {
+          const replies = parseReplies(data);
+          socket.emit("replies-fetched", {commentId, replies});
+        }
+      });
+    };
+
     const fetchVideoDetails = (data) => {
       const videoId = data.videoId;
 
@@ -78,6 +97,7 @@ const routerWithSockets = (io) => {
     };
 
     socket.on('fetch-comment-threads', fetchComments);
+    socket.on('fetch-replies', fetchReplies);
     socket.on('fetch-video-details', fetchVideoDetails);
   });
 
@@ -101,7 +121,7 @@ const routerWithSockets = (io) => {
 
   const parseComments = (data) => {
     let comments = _.map(data.items, (item) => {
-      let replies = null;
+      let replies;
       if (item.replies) {
         replies = item.replies.comments;
       }
@@ -115,6 +135,13 @@ const routerWithSockets = (io) => {
     });
 
     return comments;
+  };
+
+  const parseReplies = (data) => {
+    const replies = _.map(data.items, (item) => {
+      return item.snippet;
+    });
+    return replies
   };
 
   return router;

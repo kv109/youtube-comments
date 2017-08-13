@@ -17,3 +17,7 @@
 .logo-text {
   color: #00b392 !important;
 }
+
+.replies-placeholder {
+  font-size: smaller !important;
+}
