@@ -140,7 +140,7 @@ const routerWithSockets = (io) => {
   const parseReplies = (data) => {
     const replies = _.map(data.items, (item) => {
       return item.snippet;
-    });
+    }).reverse();
     return replies
   };
 
