@@ -19,7 +19,7 @@ const routerWithSockets = (io) => {
       }
 
       const params = {
-        maxResults: 4,
+        maxResults: 100,
         order: "relevance",
         part: "snippet,replies",
         videoId: videoId
