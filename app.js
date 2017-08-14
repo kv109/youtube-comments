@@ -16,11 +16,6 @@ global.middlewaresDir = path.join(rootDir, 'middlewares/');
 global.routesDir = path.join(rootDir, 'routes/');
 global.servicesDir = path.join(rootDir, 'services/');
 
-// Websockets
-const io = require('socket.io')(server); // Initialize io here and pass it wherever needed.
-const authorizeWithJwt = require(middlewaresDir + "/sockets/authorize");
-io.use(authorizeWithJwt);
-
 // Template engine
 app.set('views', path.join(rootDir, 'views'));
 app.set('view engine', 'pug');
@@ -41,10 +36,17 @@ app.use(cookieParser());
 app.use(express.static(path.join(rootDir, 'public')));
 
 // Routes
-// root path
-app.get('/', (req, res) => res.redirect('/sign_in'));
+app.get('/', (req, res) => res.redirect('/sign_in')); // root path
 app.use('/', require(routesDir + 'index'));
-app.use('/comments', require(routesDir + 'comments')(io));
+app.use('/comments', require(routesDir + 'comments'));
+
+// Sockets
+const io = require('socket.io')(server); // Initialize io here and pass it wherever needed.
+const authorizeWithJwt = require(middlewaresDir + "/sockets/authorize");
+io.use(authorizeWithJwt);
+
+// Bind sockets events
+require(routesDir + '/sockets/comments')(io);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

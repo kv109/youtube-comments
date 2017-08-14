@@ -1,6 +1,7 @@
 const youtube = require("youtube-api");
 const YoutubeAPI = require(servicesDir + "oauth2");
 
+// TODO: replace with passport.js
 const authenticateWithAccessToken = (req, res, next) => {
   const tokens = req.session && req.session.tokens && req.session.tokens;
   const redirectToSignInPage = () => res.redirect('/');
