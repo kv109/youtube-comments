@@ -27,6 +27,11 @@ app.set('port', port);
  * Listen on provided port, on all network interfaces.
  */
 
+if (!process.env.NODE_ENV) {
+  const oldEnv = process.env.NODE_ENV;
+  process.env.NODE_ENV = "development";
+  console.log(`NODE_ENV was blank (process.env.NODE_ENV=${oldEnv}), so it was set to process.env.NODE_ENV=${process.env.NODE_ENV}`);
+}
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);

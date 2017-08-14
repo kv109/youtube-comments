@@ -3,4 +3,5 @@ client/node_modules
 .env*
 !.env.example
 config/youtube_credentials.json
+public/javascripts/app-development*
 

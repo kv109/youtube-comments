@@ -8,8 +8,8 @@ const config = {
   entry: APP_DIR + '/app.js',
   output: {
     path: BUILD_DIR,
-    filename: 'app.js',
-    sourceMapFilename: 'app.map'
+    filename: `app-${process.env.NODE_ENV}.js`,
+    sourceMapFilename: `app-${process.env.NODE_ENV}.map`
   },
   module : {
     loaders : [
