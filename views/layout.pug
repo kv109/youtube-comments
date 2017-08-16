@@ -7,16 +7,15 @@ html
         script(src=`/javascripts/app-${process.env.NODE_ENV}.js`)
     body
         nav.navbar.navbar-toggleable-md.navbar-inverse.fixed-top.bg-inverse
-            button.navbar-toggler.navbar-toggler-right(type='button', data-toggle='collapse', data-target='#navbarsExampleDefault', aria-controls='navbarsExampleDefault', aria-expanded='false', aria-label='Toggle navigation')
+            button.navbar-toggler.navbar-toggler-right(type='button', data-toggle='collapse', data-target='#navbar', aria-controls='navbar', aria-expanded='false', aria-label='Toggle navigation')
                 span.navbar-toggler-icon
             a.logo-text.navbar-brand(href='/dashboard') YTHelper
-            collapse.navbar-collapse
+            #navbar.collapse.navbar-collapse
                 ul.navbar-nav.mr-auto
                     if currentUser
                         li.nav-item
                             a.nav-link(href='/dashboard') Dashboard
-
-                ul.navbar-nav.float-right
+                ul.navbar-nav
                     li.nav-item
                         if currentUser
                             a.nav-link(href='/sign_out') Sign out
@@ -25,7 +24,7 @@ html
                                 small (#{currentUser.name})
                         else
                             a.nav-link(href='/sign_in') Sign in
-        .container.mt-5.p-5
+        .container.mt-5.p-0.pt-3.p-md-3.pt-md-5
             div(data-is="alert-container")
                 - messages = getMessages()
                 each type in Object.keys(messages)
@@ -35,7 +34,7 @@ html
                                 span(aria-hidden='true') &times;
                             = message
             .row
-                .col-md-12
+                .col-12
                     block content
         .row
             .col-10.offset-1

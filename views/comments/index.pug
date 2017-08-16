@@ -4,17 +4,17 @@ block content
     div(data-load="comments/comments" data-video-id=videoId)
     link(rel='stylesheet' href='/stylesheets/youtube.css')
     .row
-        .col-8.offset-2.mb-2
+        .col-8.offset-2.mb-2.hidden-sm-down
             form.form-inline(action="/comments" method="get")
                 input.form-control.mr-4(id="video_url" name="video_url" type='text', placeholder='Enter another YouTube video URL' size=45)
                 button.btn.btn-primary(type='submit') Fetch comments!
-    hr
+    hr.hidden-sm-down
     .row
-        .col-8.offset-2.mt-2
+        .col-12.mt-3.col-md-8.offset-md-2.mt-2.mt-md-0
             .text-center
                 h5 comments for
                 h4(data-is="video-label")
-        .col-2
+        .col-2.hidden-sm-down
                 img(data-is="video-thumbnail" width="120" height="90")
 
     .row
