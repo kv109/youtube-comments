@@ -27,7 +27,15 @@ module.exports = (io) => {
 
       youtube.commentThreads.list(params, (err, data) => {
         if (err) {
-          handleError(err);
+          console.error(err);
+          // If order is "relevance", at some point it fails to fetch more comments and returns 400,
+          // even though nextPageToken is returned (which indicates that there are more comments).
+          // Such case can be treated as "all comments were fetched".
+          if (err.code === 400) {
+            socket.emit("all-comment-threads-fetched");
+          } else {
+            handleError(err);
+          }
         } else {
           const comments = parseComments(data);
           let nextPageToken = data.nextPageToken;
@@ -87,7 +95,7 @@ module.exports = (io) => {
       if (err.code === 401 || err.message === "No access or refresh token is set." || err.message === "invalid_request") {
         emitError("Looks like your session has expired. Please try to sign in again.");
       } else if (err.code === 404) {
-        emitError(`Could not find video with id=${videoId}`);
+        emitError("Video not found.");
       } else {
         emitError("Could not fetch comments.");
       }

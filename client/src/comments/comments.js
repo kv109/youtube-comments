@@ -14,6 +14,7 @@ const bindNextPageLink = () => {
 
 const bindSockets = (callback) => {
   socket.on("all-comment-threads-fetched", () => {
+    getNextPageLink().addClass("invisible");
     $("[data-is=all-comments-fetched-text]").removeClass("invisible");
     getSpinner().remove();
   });
